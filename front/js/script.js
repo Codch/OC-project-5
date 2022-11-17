@@ -18,21 +18,34 @@ function getArticles() {
         console.log(products);
         for (let product of products) {
             let productCard = document.createElement("a");
-            productCard.classList.add("product");
-            productCard.innerText = "coucou";
+            // productCard.classList.add("product");
             document.getElementById("items").appendChild(productCard);
+            productCard.href = `./product.html?id=${product._id}`;
 
             let article = document.createElement("article");
             productCard.appendChild(article);
-            article.innerText = "yo";
 
             let img = document.createElement("img");
             article.appendChild(img);
             console.log(product.imageUrl);
             img.src = product.imageUrl;
+            img.alt = product.altTxt;
+
+            let h3 = document.createElement("h3");
+            h3.classList.add("productName");
+            article.appendChild(h3);
+            h3.innerText = product.name;
+
+            let description = document.createElement("p");
+            description.classList.add("productDescription");
+            article.appendChild(description);
+            description.innerText = product.description;
+
+            let price = document.createElement("p");
+            article.appendChild(price);
+            price.innerText = product.price +"€";
             
             
-            // img.src = "../../back/images/kanap01.jpeg";
             
         }
     })
