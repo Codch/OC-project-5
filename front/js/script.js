@@ -18,9 +18,8 @@ function getArticles() {
         console.log(products);
         for (let product of products) {
             let productCard = document.createElement("a");
-            // productCard.classList.add("product");
             document.getElementById("items").appendChild(productCard);
-            productCard.href = `./product.html?id=${product._id}`;
+            productCard.href = './product.html?id='+product._id;
 
             let article = document.createElement("article");
             productCard.appendChild(article);
