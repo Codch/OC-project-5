@@ -18,8 +18,28 @@ function getElements() {
     })
 
     .then(function(productAPI) {
-        const elements = productAPI;
-        console.log(elements);
+        const products = productAPI;
+        console.log(products);
+
+            let img = document.createElement("img");
+            document
+                    .querySelector(".item__img")
+                    .appendChild(img)
+            img.src = products.imageUrl;
+            img.alt = products.altTxt;
+
+            document
+                    .getElementById("title")
+                    .innerText = products.name;
+
+            document
+                    .getElementById("price")
+                    .innerText = products.price;
+
+            document
+                    .getElementById("description")
+                    .innerText = products.description;
+        
 
     })
 }
