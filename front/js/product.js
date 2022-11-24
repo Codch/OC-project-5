@@ -39,9 +39,22 @@ function getElements() {
             document
                     .getElementById("description")
                     .innerText = products.description;
-        
 
+            // let colors = products.colors;
+            // for(let color of colors) {
+            //      let color1 = "blue";
+            //     document
+            //     .getElementById("colors")
+            //     .insertAdjacentHTML("beforeend", '<option value=${color}>${color}</option>');
+            // }
+
+            let colorSelect = document.getElementById("colors");
+            for (let i = 0; i < products.colors.length; i++) {
+              let option = document.createElement("option");
+              option.innerText = products.colors[i];
+              colorSelect.appendChild(option);
+            }
     })
 }
 
-getElements();
+getElements(); 
