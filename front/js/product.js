@@ -40,21 +40,44 @@ function getElements() {
                     .getElementById("description")
                     .innerText = products.description;
 
-            // let colors = products.colors;
-            // for(let color of colors) {
-            //      let color1 = "blue";
-            //     document
-            //     .getElementById("colors")
-            //     .insertAdjacentHTML("beforeend", '<option value=${color}>${color}</option>');
-            // }
-
-            let colorSelect = document.getElementById("colors");
-            for (let i = 0; i < products.colors.length; i++) {
-              let option = document.createElement("option");
-              option.innerText = products.colors[i];
-              colorSelect.appendChild(option);
+            let colors = products.colors;
+            for(let color of colors) {
+                document
+                .getElementById("colors")
+                .insertAdjacentHTML("beforeend", `<option value=${color}>${color}</option>`);
             }
+
+        //     let colorSelect = document.getElementById("colors");
+        //     for (let i = 0; i < products.colors.length; i++) {
+        //       let option = document.createElement("option");
+        //       option.innerText = products.colors[i];
+        //       colorSelect.appendChild(option);
+        //     }
     })
 }
 
+function addToCart() {
+        const addToCartBtn = document.getElementById("addToCart");
+        
+
+        addToCartBtn.addEventListener("click", function() {
+
+                const addToCartColor = document.getElementById("colors").value;
+                const addToCartNumber = parseInt(document.getElementById("quantity").value);
+
+                console.log(addToCartNumber)
+                console.log(addToCartColor)
+
+                if(addToCartNumber < 1 || addToCartNumber > 100) {
+                        alert("Choose a number between 1 and 100.")
+                        // return;
+                } else if(addToCartColor === "--SVP, choisissez une couleur --") {
+                        alert("Veuillez choisir une couleur.")
+                }
+        })
+};
+
+
+
 getElements(); 
+addToCart();
