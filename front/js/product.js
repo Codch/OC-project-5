@@ -70,9 +70,10 @@ function addToCart() {
 
                 if(addToCartNumber < 1 || addToCartNumber > 100) {
                         alert("Choose a number between 1 and 100.")
-                        // return;
-                } else if(addToCartColor === "--SVP, choisissez une couleur --") {
+                        return;
+                } else if(addToCartColor === "") {
                         alert("Veuillez choisir une couleur.")
+                        return;
                 }
         })
 };
