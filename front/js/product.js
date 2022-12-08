@@ -1,6 +1,12 @@
 let getPageURL = window.location.href;
 console.log(getPageURL)
 
+const productCardImg = document.querySelector(".item__img");
+const productCardName = document.getElementById("title");
+const productCardDescription = document.getElementById("description");
+const productCardPrice = document.getElementById("price");
+const productCardSelectColor = document.getElementById("colors");
+
 var url = new URL(getPageURL);
 var id = url.searchParams.get("id");
 console.log(id);
@@ -21,29 +27,24 @@ function getElements() {
         const products = productAPI;
         console.log(products);
 
-            let img = document.createElement("img");
-            document
-                    .querySelector(".item__img")
-                    .appendChild(img)
-            img.src = products.imageUrl;
-            img.alt = products.altTxt;
+                let img = document.createElement("img");
+                productCardImg
+                        .appendChild(img)
+                img.src = products.imageUrl;
+                img.alt = products.altTxt;
 
-            document
-                    .getElementById("title")
-                    .innerText = products.name;
+                productCardName
+                        .innerText = products.name;
 
-            document
-                    .getElementById("price")
-                    .innerText = products.price;
+                productCardPrice
+                        .innerText = products.price;
 
-            document
-                    .getElementById("description")
+                productCardDescription
                     .innerText = products.description;
 
             let colors = products.colors;
             for(let color of colors) {
-                document
-                .getElementById("colors")
+                productCardSelectColor
                 .insertAdjacentHTML("beforeend", `<option value=${color}>${color}</option>`);
             }
 
@@ -56,29 +57,57 @@ function getElements() {
     })
 }
 
+function setCart(cart) {
+        localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function getCart() {
+        let cart = localStorage.getItem("cart");
+        if(cart == null){
+                return[]
+        }else{
+                console.log(cart);
+                return JSON.parse(cart);
+        }
+}
+
 function addToCart() {
         const addToCartBtn = document.getElementById("addToCart");
         
 
         addToCartBtn.addEventListener("click", function() {
 
-                const addToCartColor = document.getElementById("colors").value;
+                const addToCartColor = productCardSelectColor.value;
                 const addToCartNumber = parseInt(document.getElementById("quantity").value);
 
                 console.log(addToCartNumber)
                 console.log(addToCartColor)
 
                 if(addToCartNumber < 1 || addToCartNumber > 100) {
-                        alert("Choose a number between 1 and 100.")
-                        return;
+                         alert("Choisissez une quantité entre 1 et 100.");
+                        
                 } else if(addToCartColor === "") {
-                        alert("Veuillez choisir une couleur.")
-                        return;
+                         alert("Veuillez choisir une couleur.");
+                        
+                } else {
+                                        // let foundProduct = cart.find()
+                        let productAdd = {
+                                name: productCardName.innerHTML,
+                                price: parseFloat(productCardPrice.innerHTML),
+                                quantity: addToCartNumber,
+                                _id: id,
+                                color: addToCartColor,
+                              };
+                        let cart = getCart();
+                        cart.push(productAdd);
+                        setCart(cart);
                 }
+                
         })
 };
 
 
 
 getElements(); 
+
 addToCart();
