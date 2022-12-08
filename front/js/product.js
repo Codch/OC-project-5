@@ -83,24 +83,31 @@ function addToCart() {
                 console.log(addToCartNumber)
                 console.log(addToCartColor)
 
+                let productAdd = {
+                        name: productCardName.innerHTML,
+                        price: parseFloat(productCardPrice.innerHTML),
+                        quantity: addToCartNumber,
+                        _id: id,
+                        color: addToCartColor,
+                      };
+
                 if(addToCartNumber < 1 || addToCartNumber > 100) {
                          alert("Choisissez une quantité entre 1 et 100.");
                         
                 } else if(addToCartColor === "") {
                          alert("Veuillez choisir une couleur.");
                         
-                } else {
-                                        // let foundProduct = cart.find()
-                        let productAdd = {
-                                name: productCardName.innerHTML,
-                                price: parseFloat(productCardPrice.innerHTML),
-                                quantity: addToCartNumber,
-                                _id: id,
-                                color: addToCartColor,
-                              };
+                } else {                                        
                         let cart = getCart();
-                        cart.push(productAdd);
-                        setCart(cart);
+                        let foundProduct = cart.find(p => p._id == productAdd._id && p.color == productAdd.color);
+                        if(foundProduct){
+                                foundProduct.quantity += productAdd.quantity
+                                setCart(cart);
+                        } else {
+                                cart.push(productAdd);
+                                setCart(cart);
+                        }
+
                 }
                 
         })
