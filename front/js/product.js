@@ -84,8 +84,6 @@ function addToCart() {
                 console.log(addToCartColor)
 
                 let productAdd = {
-                        name: productCardName.innerHTML,
-                        price: parseFloat(productCardPrice.innerHTML),
                         quantity: addToCartNumber,
                         _id: id,
                         color: addToCartColor,
