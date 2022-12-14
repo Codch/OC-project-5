@@ -1,6 +1,11 @@
+
+
 function whatinStorage() {
     let products = JSON.parse(localStorage.getItem("cart"));
     console.log(products);
+
+    let totalPrice = 0
+    let totalNumber = 0
 
     for ( let product of products){
         console.log(product._id);
@@ -42,10 +47,30 @@ function whatinStorage() {
                 </div>
               </div>
             </div>
-          </article>`)
+          </article>`);
+          totalPrice += priceTotalProduct;
+          displayTotalPrice(totalPrice);
+          totalNumber += product.quantity;
+          displayTotalNumber(totalNumber);
         })
-
     }
 }
+
+function displayTotalPrice(price) {
+  document
+    .getElementById("totalPrice")
+    .innerText = `"${price}"`;
+}
+
+function displayTotalNumber(number) {
+  document
+    .getElementById("totalQuantity")
+    .innerText = `"${number}"`;
+}
+
+// function deleteProduct() {
+//   document
+//     .
+// }
 
 whatinStorage();
