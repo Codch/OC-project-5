@@ -43,7 +43,7 @@ function whatinStorage() {
                   <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p class="deleteItem">Supprimer</p>
+                  <p id="${product.color}${product._id}" class="deleteItem">Supprimer</p>
                 </div>
               </div>
             </div>
@@ -52,25 +52,89 @@ function whatinStorage() {
           displayTotalPrice(totalPrice);
           totalNumber += product.quantity;
           displayTotalNumber(totalNumber);
+
+          let removeItem = `#${product.color}${product._id}`;
+          buttonRemoveProductFromCart(removeItem, product);
+
+          // let selectInput = document.querySelector("div.cart__item__content__settings__quantity input[name='itemQuantity']");
+          // changeQuantity(selectInput);
         })
+
     }
 }
 
 function displayTotalPrice(price) {
   document
     .getElementById("totalPrice")
-    .innerText = `"${price}"`;
+    .innerText = `${price}`;
 }
 
 function displayTotalNumber(number) {
   document
     .getElementById("totalQuantity")
-    .innerText = `"${number}"`;
+    .innerText = `${number}`;
 }
 
-// function deleteProduct() {
-//   document
-//     .
+function setCart(cart) {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function getCart() {
+  let cart = localStorage.getItem("cart");
+  if(cart == null){
+          return[]
+  }else{
+          console.log(cart);
+          return JSON.parse(cart);
+  }
+}
+
+// function changeQuantity(product, quantity) {
+//   let cart = getCart();
+//   let foundProduct = cart.find(p => p._id == product._id)
+//   if(foundproduct != undefined) {
+//     foundProduct.
+//   }
+// }
+
+  // newQuantity.addEventListener("change", function() {
+                                        
+  //   let cart = getCart();
+  //   let foundProduct = cart.find(p => p._id == productAdd._id && p.color == productAdd.color);
+  //   if(foundProduct){
+  //           foundProduct.quantity == newQuantity.value;
+  //           setCart(cart);
+  //   } else {
+  //           cart.push(productAdd);
+  //           setCart(cart);
+  //   }
+  // })
+// };
+
+function removeProductFromCart(product) {
+  let cart = getCart();
+  cart = cart.filter(p => !(p._id == product._id && p.color == product.color));
+  setCart(cart);
+}
+
+function buttonRemoveProductFromCart(element, product){
+  document.querySelector(element)
+          .addEventListener("click",() => removeProductFromCart(product))
+};  
+
+
+// function buttonRemoveProductFromCart(){
+//   document.querySelector("div.cart__item__content__settings__quantity input[name='itemQuantity']")
+//           .addEventListener("click", function {
+//             removeProductFromCart(product);
+//           })
+// }
+
+// function selectProductToRemove() {
+//   document.querySelector(".deleteItem")
+//           .addEventListener("click", function() {
+
+//           })
 // }
 
 whatinStorage();
