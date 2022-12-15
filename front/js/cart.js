@@ -43,17 +43,18 @@ function whatinStorage() {
                   <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p id="${product.color}${product._id}" class="deleteItem">Supprimer</p>
+                  <p id="deleteItem_${product.color}${product._id}" class="deleteItem">Supprimer</p>
                 </div>
               </div>
             </div>
           </article>`);
           totalPrice += priceTotalProduct;
           displayTotalPrice(totalPrice);
+
           totalNumber += product.quantity;
           displayTotalNumber(totalNumber);
 
-          let removeItem = `#${product.color}${product._id}`;
+          let removeItem = `#deleteItem_${product.color}${product._id}`;
           buttonRemoveProductFromCart(removeItem, product);
 
           // let selectInput = document.querySelector("div.cart__item__content__settings__quantity input[name='itemQuantity']");
