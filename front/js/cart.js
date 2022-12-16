@@ -1,4 +1,4 @@
-
+whatinStorage();
 
 function whatinStorage() {
     let products = JSON.parse(localStorage.getItem("cart"));
@@ -151,4 +151,79 @@ function buttonRemoveProductFromCart(element){
           })
 };  
 
-whatinStorage();
+function checkFormAndPostRequest() {
+    const order = document.querySelector("#order");
+    const inputFirstName = document.querySelector("#firstName");
+    const inputLastName = document.querySelector("#lastName");
+    const inputAddress = document.querySelector("#address");
+    const inputCity = document.querySelector("#city");
+    const inputEmail = document.querySelector("#email");
+
+
+    const firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
+    const lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
+    const addressErrorMsg = document.querySelector("#addressErrorMsg");
+    const cityErrorMsg = document.querySelector("#cityErrorMsg");
+    const emailErrorMsg = document.querySelector("#emailErrorMsg");
+
+    const nameRegex = /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/;
+    const addressRegex = /^[\w\s,'-]*$/;
+    const cityRegex = /^[a-zA-Z\s-]*$/;
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+    inputFirstName.addEventListener("change", function(e){
+      if(!nameRegex.test(inputFirstName.value)){
+        firstNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
+      } else {
+        firstNameErrorMsg.innerHTML = "";
+      }
+    });
+
+    inputLastName.addEventListener("change", function(e){
+      if(!nameRegex.test(inputLastName.value)){
+        lastNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
+      } else {
+        lastNameErrorMsg.innerHTML = "";
+      }
+    });
+
+    inputAddress.addEventListener("change", function(e){
+      if(!addressRegex.test(inputAddress.value)){
+        addressErrorMsg.innerHTML = "Veuillez entrer une adresse valide";
+      } else {
+        addressErrorMsg.innerHTML = "";
+      }
+    });
+
+    inputCity.addEventListener("change", function(e){
+      if(!cityRegex.test(inputCity.value)){
+        cityErrorMsg.innerHTML = "Veuillez entrer une ville valide";
+      } else {
+        cityErrorMsg.innerHTML = "";
+      }
+    });
+
+    inputEmail.addEventListener("change", function(e){
+      if(!emailRegex.test(inputEmail.value)){
+        emailErrorMsg.innerHTML = "Veuillez entrer un email valide";
+      } else {
+        emailErrorMsg.innerHTML = "";
+      }
+    });
+    
+
+    // order.addEventListener("click", function(e) {
+    //   if(
+    //     !inputFirstName.value ||
+    //     !inputLastName.value ||
+    //     !inputAdress.value ||
+    //     !inputCity.value ||
+    //     !inputEmail.value
+    //   ) {
+    //     alert("Vous devez renseigner l'intégralité des champs")
+    //   e.preventDefault();
+    //   }  
+    // });
+}
+
+checkFormAndPostRequest();
