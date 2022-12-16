@@ -7,6 +7,7 @@ function whatinStorage() {
     let totalPrice = 0
     let totalNumber = 0
 
+    document.getElementById("cart__items").innerHTML = "";
     for ( let product of products){
         console.log(product._id);
         console.log(product);
@@ -27,7 +28,7 @@ function whatinStorage() {
             console.log(priceTotalProduct);
             document
             .getElementById("cart__items")
-            .insertAdjacentHTML("beforeend", `<article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+            .insertAdjacentHTML("beforeend", `<article class="cart__item" data-id="${product._id}" data-color="${product.color}">
             <div class="cart__item__img">
               <img src="${res.imageUrl}" alt="${res.altTxt}">
             </div>
@@ -43,22 +44,27 @@ function whatinStorage() {
                   <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p id="deleteItem_${product.color}${product._id}" class="deleteItem">Supprimer</p>
+                  <p class="deleteItem">Supprimer</p>
                 </div>
               </div>
             </div>
           </article>`);
+
+
+          let removeItem = document.querySelector(
+            `article[data-id="${product._id}"][data-color="${product.color}"] .deleteItem`);
+          buttonRemoveProductFromCart(removeItem);
+
+          let quantitySelector = document.querySelector(
+            `article[data-id="${product._id}"][data-color="${product.color}"] .itemQuantity`);
+          selectChangeQuantity(quantitySelector);
+
           totalPrice += priceTotalProduct;
           displayTotalPrice(totalPrice);
 
           totalNumber += product.quantity;
           displayTotalNumber(totalNumber);
 
-          let removeItem = `#deleteItem_${product.color}${product._id}`;
-          buttonRemoveProductFromCart(removeItem, product);
-
-          // let selectInput = document.querySelector("div.cart__item__content__settings__quantity input[name='itemQuantity']");
-          // changeQuantity(selectInput);
         })
 
     }
@@ -90,52 +96,59 @@ function getCart() {
   }
 }
 
-// function changeQuantity(product, quantity) {
-//   let cart = getCart();
-//   let foundProduct = cart.find(p => p._id == product._id)
-//   if(foundproduct != undefined) {
-//     foundProduct.
-//   }
-// }
+function changeQuantity(event, product) {
+  let input = event.target;
+  let cart = getCart();
+  let foundProduct = cart.find(p => p._id == product._id && p.color == product.color)
+    foundProduct.quantity = parseInt(input.value);
+    console.log(input.value);
+    console.log(foundProduct);
+    if (foundProduct.quantity == 0) {
+      // Supprimer le produit du panier en utilisant la fonction splice
+      let index = cart.indexOf(foundProduct);
+      cart.splice(index, 1);
+      setCart(cart);
+      whatinStorage();
+    } else {
+    setCart(cart);
+    whatinStorage();
+    }
+};
 
-  // newQuantity.addEventListener("change", function() {
-                                        
-  //   let cart = getCart();
-  //   let foundProduct = cart.find(p => p._id == productAdd._id && p.color == productAdd.color);
-  //   if(foundProduct){
-  //           foundProduct.quantity == newQuantity.value;
-  //           setCart(cart);
-  //   } else {
-  //           cart.push(productAdd);
-  //           setCart(cart);
-  //   }
-  // })
-// };
+function selectChangeQuantity(input) {
+  input
+          .addEventListener("change",event => {
+            let parentArticle = input.closest("article");
+            let id = parentArticle.dataset.id;
+            let color = parentArticle.dataset.color;
+            let product = {
+              _id: id,
+              color: color
+            };
+
+            changeQuantity(event, product);
+});
+}
+
+
 
 function removeProductFromCart(product) {
   let cart = getCart();
-  cart = cart.filter(p => !(p._id == product._id && p.color == product.color));
-  setCart(cart);
+  let updateCart = cart.filter(p => p._id !== product._id || p.color !== product.color);
+  setCart(updateCart);
+  whatinStorage();
 }
 
-function buttonRemoveProductFromCart(element, product){
-  document.querySelector(element)
-          .addEventListener("click",() => removeProductFromCart(product))
+function buttonRemoveProductFromCart(element){
+  element
+          .addEventListener("click",event => {
+            if(event.target.classList.contains('deleteItem')){
+              let productId = event.target.parentElement.parentElement.parentElement.parentElement.dataset.id;
+              let productColor = event.target.parentElement.parentElement.parentElement.parentElement.dataset.color;
+              let product = { _id: productId, color: productColor };
+              removeProductFromCart(product);
+            }
+          })
 };  
-
-
-// function buttonRemoveProductFromCart(){
-//   document.querySelector("div.cart__item__content__settings__quantity input[name='itemQuantity']")
-//           .addEventListener("click", function {
-//             removeProductFromCart(product);
-//           })
-// }
-
-// function selectProductToRemove() {
-//   document.querySelector(".deleteItem")
-//           .addEventListener("click", function() {
-
-//           })
-// }
 
 whatinStorage();
