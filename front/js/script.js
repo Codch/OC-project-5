@@ -1,4 +1,7 @@
 function getArticles() {
+
+    // Effectue une requête HTTP vers l'URL de l'API pour récupérer des données de produits
+
     fetch("http://localhost:3000/api/products")
 
     .then(function (res) {
@@ -16,6 +19,8 @@ function getArticles() {
     .then(function(productsAPI){
         const products = productsAPI;
         console.log(products);
+
+        // Itère sur chaque produit dans l'objet "products" et crée un contenu HTML pour chacun d'entre eux
         for (let product of products) {
             let productCard = document.createElement("a");
             document.getElementById("items").appendChild(productCard);

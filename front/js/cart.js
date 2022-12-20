@@ -2,6 +2,7 @@ whatinStorage();
 
 function whatinStorage() {
     let products = JSON.parse(localStorage.getItem("cart"));
+    resultAPI = products;
     console.log(products);
 
     let totalPrice = 0
@@ -171,7 +172,7 @@ function checkFormAndPostRequest() {
     const cityRegex = /^[a-zA-Z\s-]*$/;
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
-    inputFirstName.addEventListener("change", function(e){
+    inputFirstName.addEventListener("input", function(e){
       if(!nameRegex.test(inputFirstName.value)){
         firstNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
       } else {
@@ -179,7 +180,7 @@ function checkFormAndPostRequest() {
       }
     });
 
-    inputLastName.addEventListener("change", function(e){
+    inputLastName.addEventListener("input", function(e){
       if(!nameRegex.test(inputLastName.value)){
         lastNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
       } else {
@@ -187,7 +188,7 @@ function checkFormAndPostRequest() {
       }
     });
 
-    inputAddress.addEventListener("change", function(e){
+    inputAddress.addEventListener("input", function(e){
       if(!addressRegex.test(inputAddress.value)){
         addressErrorMsg.innerHTML = "Veuillez entrer une adresse valide";
       } else {
@@ -195,7 +196,7 @@ function checkFormAndPostRequest() {
       }
     });
 
-    inputCity.addEventListener("change", function(e){
+    inputCity.addEventListener("input", function(e){
       if(!cityRegex.test(inputCity.value)){
         cityErrorMsg.innerHTML = "Veuillez entrer une ville valide";
       } else {
@@ -203,7 +204,7 @@ function checkFormAndPostRequest() {
       }
     });
 
-    inputEmail.addEventListener("change", function(e){
+    inputEmail.addEventListener("input", function(e){
       if(!emailRegex.test(inputEmail.value)){
         emailErrorMsg.innerHTML = "Veuillez entrer un email valide";
       } else {
@@ -211,19 +212,96 @@ function checkFormAndPostRequest() {
       }
     });
     
+    const form = document.querySelector("form");
+    let orderInfo;
 
-    // order.addEventListener("click", function(e) {
-    //   if(
-    //     !inputFirstName.value ||
-    //     !inputLastName.value ||
-    //     !inputAdress.value ||
-    //     !inputCity.value ||
-    //     !inputEmail.value
-    //   ) {
-    //     alert("Vous devez renseigner l'intégralité des champs")
-    //   e.preventDefault();
-    //   }  
-    // });
+    order.addEventListener("click", function(e) {
+      e.preventDefault();
+      let isValid = true;
+
+      if(inputFirstName.value === "") {
+        firstNameErrorMsg.innerHTML = "Ce champ est obligatoire";
+        isValid = false;
+      } else if(!nameRegex.test(inputFirstName.value)){
+        firstNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
+        isValid = false;
+      }
+      if(inputLastName.value === "") {
+        lastNameErrorMsg.innerHTML = "Ce champ est obligatoire";
+        isValid = false;
+      } else if(!nameRegex.test(inputLastName.value)){
+        lastNameErrorMsg.innerHTML = "Veuillez entrer un nom valide";
+        isValid = false;
+      }
+      if(inputAddress.value === "") {
+        addressErrorMsg.innerHTML = "Ce champ est obligatoire";
+        isValid = false;
+      } else if(!addressRegex.test(inputAddress.value)){
+        addressErrorMsg.innerHTML = "Veuillez entrer une adresse valide";
+        isValid = false;
+      }
+      if(inputCity.value === "") {
+        cityErrorMsg.innerHTML = "Ce champ est obligatoire";
+        isValid = false;
+      } else if(!cityRegex.test(inputCity.value)){
+        cityErrorMsg.innerHTML = "Veuillez entrer une ville valide";
+        isValid = false;
+      }
+      if(inputEmail.value === "") {
+        emailErrorMsg.innerHTML = "Ce champ est obligatoire";
+        isValid = false;
+      } else if(!emailRegex.test(inputEmail.value)){
+        emailErrorMsg.innerHTML = "Veuillez entrer un mail valide";
+        isValid = false;
+      }
+
+
+  if(isValid) {
+    let cart = JSON.parse(localStorage.getItem("cart"));
+    let idsProduits = cart.map(produit => produit._id);
+    // let productsBought = [];
+    // productsBought.push(idsProduits)
+    let customerInfo = {
+      contact: {
+        firstName :inputFirstName.value,
+        lastName : inputLastName.value,
+        address :inputAddress.value,
+        city : inputCity.value,
+        email : inputEmail.value,
+      },
+      products : idsProduits,
+    };
+    console.log(customerInfo);
+    orderInfo = customerInfo;
+
+            // -------  Envoi de la requête POST au back-end --------
+      // Création de l'entête de la requête
+      const options = {
+        method: "POST",
+        body: JSON.stringify(orderInfo),
+        headers: { "Content-Type": "application/json" },
+      };
+            // Envoie de la requête avec l'en-tête. On changera de page avec un localStorage qui ne contiendra plus que l'order id.
+            fetch("http://localhost:3000/api/products/order", options)
+            .then(function(res) {
+              console.log("succes", res);
+              return res.json();
+            })
+            .then((data) => {
+              localStorage.clear();
+              console.log(data)
+
+               document.location.href = "confirmation.html?orderId=" + data.orderId;
+            })
+            .catch((err) => {
+              alert("Il y a eu une erreur : " + err);
+            });
+      }  
+
+    
+});
+
+
 }
 
 checkFormAndPostRequest();
