@@ -12,6 +12,7 @@ var id = url.searchParams.get("id");
 console.log(id);
 
 function getElements() {
+        // On récupère les informations sur le produit en question
     fetch("http://localhost:3000/api/products/"+id)
     .then(function(res) {
         console.log("succes", res);
@@ -23,6 +24,7 @@ function getElements() {
 
     })
 
+        // On affiche sur la page les informations concernant le produit
     .then(function(productAPI) {
         const products = productAPI;
         console.log(products);
@@ -47,13 +49,6 @@ function getElements() {
                 productCardSelectColor
                 .insertAdjacentHTML("beforeend", `<option value=${color}>${color}</option>`);
             }
-
-        //     let colorSelect = document.getElementById("colors");
-        //     for (let i = 0; i < products.colors.length; i++) {
-        //       let option = document.createElement("option");
-        //       option.innerText = products.colors[i];
-        //       colorSelect.appendChild(option);
-        //     }
     })
 }
 
@@ -70,7 +65,7 @@ function getCart() {
                 return JSON.parse(cart);
         }
 }
-
+        // On vérifie l'exactitude des informations choisis par l'utilisateur et on les ajoute au localStorage
 function addToCart() {
         const addToCartBtn = document.getElementById("addToCart");
         

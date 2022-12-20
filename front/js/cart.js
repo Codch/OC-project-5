@@ -9,6 +9,8 @@ function whatinStorage() {
     let totalNumber = 0
 
     document.getElementById("cart__items").innerHTML = "";
+
+      // On itère dans products pour récupérer les informations produits
     for ( let product of products){
         console.log(product._id);
         console.log(product);
@@ -23,6 +25,7 @@ function whatinStorage() {
     
         })
 
+        // On affiche chaque produits présent dans le localStorage et ses informations
         .then(function(res){
             console.log(res);
             let priceTotalProduct = res.price * product.quantity;
@@ -60,9 +63,11 @@ function whatinStorage() {
             `article[data-id="${product._id}"][data-color="${product.color}"] .itemQuantity`);
           selectChangeQuantity(quantitySelector);
 
+          // A chaque itération on additionne le prix des produits au prix total
           totalPrice += priceTotalProduct;
           displayTotalPrice(totalPrice);
 
+          // A chaque itération on additionne la quantité des produits à la quantité totale
           totalNumber += product.quantity;
           displayTotalNumber(totalNumber);
 
@@ -71,12 +76,14 @@ function whatinStorage() {
     }
 }
 
+      // On affiche le prix total du panier
 function displayTotalPrice(price) {
   document
     .getElementById("totalPrice")
     .innerText = `${price}`;
 }
 
+    // On affiche la quantité totale des produits du panier
 function displayTotalNumber(number) {
   document
     .getElementById("totalQuantity")
@@ -97,6 +104,7 @@ function getCart() {
   }
 }
 
+// On permet de modifier la quantité et on la met à jour dans le localStorage
 function changeQuantity(event, product) {
   let input = event.target;
   let cart = getCart();
@@ -104,18 +112,19 @@ function changeQuantity(event, product) {
     foundProduct.quantity = parseInt(input.value);
     console.log(input.value);
     console.log(foundProduct);
+    // Si la quantité est égale à 0 alors on supprime le produit du local storage et on affiche le nouveau contenu du localStorage
     if (foundProduct.quantity == 0) {
-      // Supprimer le produit du panier en utilisant la fonction splice
       let index = cart.indexOf(foundProduct);
       cart.splice(index, 1);
       setCart(cart);
       whatinStorage();
+      // On affiche le nouveau contenu du localStorage pour actualiser la nouvelle quantité
     } else {
     setCart(cart);
     whatinStorage();
     }
 };
-
+    // On crée un évènement onChange pour obtenir les informations lié au produit sur lequel on veut changer la quantité
 function selectChangeQuantity(input) {
   input
           .addEventListener("change",event => {
@@ -132,7 +141,7 @@ function selectChangeQuantity(input) {
 }
 
 
-
+// On récupère l'id et la couleur du produit que l'on veut supprimer puis on filtre afin de garder uniquement les produits à conserver dans le panier, pour enfin actualiser le nouveau contenu
 function removeProductFromCart(product) {
   let cart = getCart();
   let updateCart = cart.filter(p => p._id !== product._id || p.color !== product.color);
@@ -140,6 +149,7 @@ function removeProductFromCart(product) {
   whatinStorage();
 }
 
+// On crée un évènement onClick pour obtenir l'id et la couleur du produit que l'on veut supprimer
 function buttonRemoveProductFromCart(element){
   element
           .addEventListener("click",event => {
@@ -152,6 +162,7 @@ function buttonRemoveProductFromCart(element){
           })
 };  
 
+// On vérifie que les champs soient remplis et correctement, pour ensuite envoyer un requête POST et obtenir l'orderId
 function checkFormAndPostRequest() {
     const order = document.querySelector("#order");
     const inputFirstName = document.querySelector("#firstName");
@@ -172,6 +183,7 @@ function checkFormAndPostRequest() {
     const cityRegex = /^[a-zA-Z\s-]*$/;
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
+    // On affiche un message d'erreur si la Regex n'est pas respectée pour chaque champs
     inputFirstName.addEventListener("input", function(e){
       if(!nameRegex.test(inputFirstName.value)){
         firstNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
@@ -215,6 +227,7 @@ function checkFormAndPostRequest() {
     const form = document.querySelector("form");
     let orderInfo;
 
+    // On vérifie que chaque champs soit correctement rempli puis on envoie un requête POST au back end pour récupérer un numéro de commande
     order.addEventListener("click", function(e) {
       e.preventDefault();
       let isValid = true;
@@ -259,8 +272,7 @@ function checkFormAndPostRequest() {
   if(isValid) {
     let cart = JSON.parse(localStorage.getItem("cart"));
     let idsProduits = cart.map(produit => produit._id);
-    // let productsBought = [];
-    // productsBought.push(idsProduits)
+
     let customerInfo = {
       contact: {
         firstName :inputFirstName.value,
@@ -281,7 +293,7 @@ function checkFormAndPostRequest() {
         body: JSON.stringify(orderInfo),
         headers: { "Content-Type": "application/json" },
       };
-            // Envoie de la requête avec l'en-tête. On changera de page avec un localStorage qui ne contiendra plus que l'order id.
+            // Envoie de la requête avec l'en-tête. 
             fetch("http://localhost:3000/api/products/order", options)
             .then(function(res) {
               console.log("succes", res);
@@ -291,6 +303,7 @@ function checkFormAndPostRequest() {
               localStorage.clear();
               console.log(data)
 
+              // Redirection vers la page de confirmation avec l'oderId dans l'URL
                document.location.href = "confirmation.html?orderId=" + data.orderId;
             })
             .catch((err) => {
