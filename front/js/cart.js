@@ -112,8 +112,8 @@ function changeQuantity(event, product) {
     foundProduct.quantity = parseInt(input.value);
     console.log(input.value);
     console.log(foundProduct);
-    // Si la quantité est égale à 0 alors on supprime le produit du local storage et on affiche le nouveau contenu du localStorage
-    if (foundProduct.quantity == 0) {
+    // Si la quantité est inférieure ou égale à 0 alors on supprime le produit du local storage et on affiche le nouveau contenu du localStorage
+    if (foundProduct.quantity <= 0) {
       let index = cart.indexOf(foundProduct);
       cart.splice(index, 1);
       setCart(cart);
