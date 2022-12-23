@@ -1,5 +1,6 @@
 whatinStorage();
 
+// Permet de générer un fiche produit pour chaque produit contenu dans le localStorage
 function whatinStorage() {
     let products = JSON.parse(localStorage.getItem("cart"));
     resultAPI = products;
@@ -15,11 +16,14 @@ function whatinStorage() {
         console.log(product._id);
         console.log(product);
         fetch("http://localhost:3000/api/products/"+product._id)
+
+        // Retourne la réponse en objet Javascript
         .then(function(res) {
             console.log("succes", res);
             return res.json();
         })
     
+        // Renvoie une erreur si la promise est rejetée
         .catch(function(error){
             console.log("error", error);
     
@@ -90,10 +94,12 @@ function displayTotalNumber(number) {
     .innerText = `${number}`;
 }
 
+// Permet d'enregistrer du contenu sous format JSON dans la clé cart du localStorage
 function setCart(cart) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// Permet de récupérer le contenu de la clé 'cart' dans le localStorage sous format Javascript
 function getCart() {
   let cart = localStorage.getItem("cart");
   if(cart == null){
@@ -194,7 +200,7 @@ function checkFormAndPostRequest() {
 
     inputLastName.addEventListener("input", function(e){
       if(!nameRegex.test(inputLastName.value)){
-        lastNameErrorMsg.innerHTML = "Veuillez entrer un prénom valide";
+        lastNameErrorMsg.innerHTML = "Veuillez entrer un nom valide";
       } else {
         lastNameErrorMsg.innerHTML = "";
       }

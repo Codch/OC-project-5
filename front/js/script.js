@@ -1,14 +1,17 @@
+// Récupère les données des produits dans l'API et génère un contenu HTML pour chacun
 function getArticles() {
 
     // Effectue une requête HTTP vers l'URL de l'API pour récupérer des données de produits
 
     fetch("http://localhost:3000/api/products")
 
+    // Retourne la réponse en objet Javascript
     .then(function (res) {
         console.log("succes", res);
         return res.json();
     })
 
+    // Renvoie une erreur si la promise est rejetée
     .catch(function(error){
         console.log("error", error);
         document
